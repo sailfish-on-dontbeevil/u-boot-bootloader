@@ -7,6 +7,7 @@ make PLAT=sun50i_a64 DEBUG=1 bl31
 export BL31=./build/sun50i_a64/debug/bl31.bin
 
 echo "Building U-boot for A64 with ATF"
+cd ../u-boot
 make clean
 make sopine_baseboard_defconfig
 make
