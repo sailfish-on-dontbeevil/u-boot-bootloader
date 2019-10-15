@@ -4,7 +4,7 @@
 echo "Building ARM Trusted Firmware (ATF)..."
 cd arm-trusted-firmware
 make PLAT=sun50i_a64 DEBUG=1 bl31
-export BL31=./build/sun50i_a64/debug/bl31.bin
+export BL31=../arm-trusted-firmware/build/sun50i_a64/debug/bl31.bin
 
 echo "Building U-boot for A64 with ATF"
 cd ../u-boot
