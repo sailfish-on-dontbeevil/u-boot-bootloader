@@ -1,15 +1,16 @@
-gpio set 114
+echo "========== Setting up bootargs ==========="
+gpio set 98 # Enable vibrator
+gpio set 114 # Turn LED green on
 part uuid ${devtype} ${devnum}:2 uuid
 setenv bootargs console=tty0 console=ttyS0,115200 root=PARTUUID=${uuid} no_console_suspend rootwait quiet earlycon=uart,mmio32,0x01c28000 panic=10 consoleblank=0 loglevel=0
 
-gpio set 115
-echo "Loading DTB"
+echo "========= Loading DTB and kernel ========="
+gpio set 115 # Turn LED red on
 load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} /sun50i-a64-pinephone.dtb
-
-echo "Loading kernel Image"
 load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} /Image
 
-gpio set 116
-echo "Booting kernel"
+echo "============= Booting kernel ============="
+gpio set 116 # Turn LED blue on
+gpio clear 98 # Disable vibrator
 booti ${kernel_addr_r} - ${fdt_addr_r}
 
