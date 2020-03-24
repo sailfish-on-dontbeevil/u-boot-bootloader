@@ -1,6 +1,6 @@
 [submodule "u-boot"]
 	path = u-boot
-	url = https://github.com/u-boot/u-boot
+	url = https://gitlab.com/pine64-org/u-boot
 [submodule "arm-trusted-firmware"]
 	path = arm-trusted-firmware
 	url = https://github.com/ARM-software/arm-trusted-firmware.git
