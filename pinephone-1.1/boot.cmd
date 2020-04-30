@@ -6,7 +6,7 @@ setenv bootargs console=tty0 console=ttyS0,115200 root=PARTUUID=${uuid} no_conso
 
 echo "========= Loading DTB and kernel ========="
 gpio set 115 # Turn LED red on
-load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} /sun50i-a64-pinephone.dtb
+load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} /sun50i-a64-pinephone-1.1.dtb
 load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} /Image
 
 echo "============= Booting kernel ============="
