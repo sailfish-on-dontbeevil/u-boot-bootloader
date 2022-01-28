@@ -5,6 +5,7 @@ on: [push, pull_request]
 env:
   ARCH: arm64
   CROSS_COMPILE: aarch64-linux-gnu-
+  GIT_SSL_NO_VERIFY: 1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
