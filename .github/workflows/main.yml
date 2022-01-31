@@ -58,6 +58,7 @@ jobs:
         mkimage -C none -A arm -T script -d ./pinephone-1.0/boot.cmd ./pinephone-1.0/boot.scr
         mkimage -C none -A arm -T script -d ./pinephone-1.1/boot.cmd ./pinephone-1.1/boot.scr
         mkimage -C none -A arm -T script -d ./pinetab/boot.cmd ./pinetab/boot.scr
+        mkimage -C none -A arm -T script -d ./pinephone-pro/boot.cmd ./pinephone-pro/boot.scr
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
