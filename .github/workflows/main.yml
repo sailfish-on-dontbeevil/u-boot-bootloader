@@ -42,6 +42,10 @@ jobs:
         cd
         echo "Installed $PATH"
         
+    - name: Apply Patches
+      run: |
+        ./patches/apply-patch u-boot
+
     - name: Build u-boot
       run: |
         export PATH="/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH"
