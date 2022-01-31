@@ -11,6 +11,7 @@ cd ../u-boot
 make clean
 export BL31=../arm-trusted-firmware/build/sun50i_a64/release/bl31.bin
 make pinephone_defconfig
+make
 export BL31=../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf
 make pinephone-pro-rk3399_defconfig
 make
