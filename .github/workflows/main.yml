@@ -44,6 +44,8 @@ jobs:
         
     - name: Build u-boot
       run: |
+        export PATH="/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH"
+        ls -lh /opt/gcc-arm-none-eabi-10.3-2021.10/bin
         ./build.sh
         
     - name: Build boot commands
