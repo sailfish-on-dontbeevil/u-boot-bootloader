@@ -44,7 +44,7 @@ jobs:
         
     - name: Apply Patches
       run: |
-        ./patches/apply-patch u-boot
+        sh ./patches/apply-patches.sh u-boot
 
     - name: Build u-boot
       run: |
