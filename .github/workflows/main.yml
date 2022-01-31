@@ -40,6 +40,7 @@ jobs:
         rm gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
         export PATH="/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH"
         cd
+        echo "Installed $PATH"
         
     - name: Build u-boot
       run: |
