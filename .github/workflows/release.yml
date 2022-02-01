@@ -1,0 +1,101 @@
+name: release
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+env:
+  ARCH: arm64
+  CROSS_COMPILE: aarch64-linux-gnu-
+  GIT_SSL_NO_VERIFY: 1
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: ubports/build-essential:bionic
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout repository
+      uses: actions/checkout@v1
+
+    # This should be handled by the previous action but doesn't seem to work well
+    - name: Fetch submodules
+      run: |
+        git submodule init
+        git submodule update --init --recursive --depth 1
+
+    - name: Install required dependencies
+      run: |
+        apt update
+        apt install -y unzip flex bc bison kmod cpio libssl-dev device-tree-compiler python3 python3-dev swig u-boot-tools python3-distutils python3-setuptools
+
+    - name: Install arm compiler
+      run: |
+        cd /opt
+        wget "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
+        tar -jxf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+        rm gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+        export PATH="/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH"
+        cd
+        echo "Installed $PATH"
+
+    - name: Apply Patches
+      run: |
+        sh ./patches/apply-patches.sh u-boot
+
+    - name: Build u-boot
+      run: |
+        export PATH="/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH"
+        ls -lh /opt/gcc-arm-none-eabi-10.3-2021.10/bin
+        ./build.sh
+
+    - name: Build boot commands
+      run: |
+        mkimage -C none -A arm -T script -d ./devkit/boot.cmd ./devkit/boot.scr
+        mkimage -C none -A arm -T script -d ./pinephone-1.0/boot.cmd ./pinephone-1.0/boot.scr
+        mkimage -C none -A arm -T script -d ./pinephone-1.1/boot.cmd ./pinephone-1.1/boot.scr
+        mkimage -C none -A arm -T script -d ./pinetab/boot.cmd ./pinetab/boot.scr
+        mkimage -C none -A arm -T script -d ./pinephone-pro/boot.cmd ./pinephone-pro/boot.scr
+
+    - name: Upload a Build Artifact
+      id: upload_artifact
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: u-boot-pinephone-${{ github.ref }}
+        # A file, directory or wildcard pattern that describes what to upload
+        path: |
+          ./*/*.bin
+          ./*/*.scr
+          ./*/*.itb
+          ./*/*.img
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./u-boot-pinephone-${{ github.ref }}.zip
+        asset_name: u-boot-pinephone-${{ github.ref }}
+        asset_content_type: application/zip
+
