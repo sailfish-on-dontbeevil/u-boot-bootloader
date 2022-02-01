@@ -69,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         # Artifact name
-        name: u-boot-pinephone-${{ github.ref }}
+        name: u-boot-pinephone-${{ github.sha }}
         # A file, directory or wildcard pattern that describes what to upload
         path: |
           ./*/*.bin
@@ -95,7 +95,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./u-boot-pinephone-${{ github.ref }}.zip
-        asset_name: u-boot-pinephone-${{ github.ref }}
+        asset_path: ./u-boot-pinephone-${{ github.sha }}.zip
+        asset_name: u-boot-pinephone-${{ github.sha }}
         asset_content_type: application/zip
 
