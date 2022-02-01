@@ -69,3 +69,5 @@ jobs:
         path: |
           ./*/*.bin
           ./*/*.scr
+          ./*/*.itb
+          ./*/*.img
